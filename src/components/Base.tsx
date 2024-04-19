@@ -7,6 +7,7 @@ export type Option = {
     name: string;
     symbol: string;
     premint: number;
+    license: string;
     ismintable: boolean;
     isburnable: boolean;
     ispausable: boolean;
@@ -17,6 +18,7 @@ const INIT_OPTION: Option = {
     name: '',
     symbol: '',
     premint: 0,
+    license: 'MIT',
     ismintable: false,
     isburnable: false,
     ispausable: false,
@@ -39,6 +41,7 @@ const Base = () => {
                     name: option.name,
                     symbol: option.symbol,
                     premint: option.premint,
+                    license: option.license,
                     ismintable: option.ismintable ? 1 : 0,
                     isburnable: option.isburnable ? 1 : 0,
                     ispausable: option.ispausable ? 1 : 0,

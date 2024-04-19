@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Option } from "./Base";
 type TokenOptionProps = {
     option: Option;
     setOption: (option: Option) => void;
 }
 const TokenOption: React.FC<TokenOptionProps> = (props) => {
-    const { name, symbol, premint, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting } = props.option;
+    const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting } = props.option;
     // HANDLE CHANGE
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         props.setOption({ ...props.option, name: e.target.value });
@@ -17,6 +17,9 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
         if (e.target.value === '') {
             props.setOption({ ...props.option, premint: 0 });
         }
+    }
+    const handleLicenseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, license: e.target.value })
     }
     const handleMintableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         props.setOption({ ...props.option, ismintable: e.target.checked });
@@ -146,7 +149,7 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
                 </div>
                 <div>
                     <label className="block" htmlFor="license">License</label>
-                    <input id="license" type="text" className="rounded indent-2" value={'MIT'}></input>
+                    <input id="license" type="text" className="rounded indent-2" placeholder="MIT" onChange={handleLicenseChange} value={license}></input>
                 </div>
             </div>
         </div>
