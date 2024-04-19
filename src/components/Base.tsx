@@ -75,7 +75,16 @@ const Base = () => {
     return (
         <div className="h-full bg-lime-500">
             <div className="flex flex-col h-full">
-                <div className="block bg-red-100">abc</div>
+                <div className="block bg-red-100">
+                    <div className='flex justify-end gap-2 w-full p-3 bg-green-500'>
+                        <button className='bg-white rounded border p-2 text-sm border-black'>
+                            Download
+                        </button>
+                        <button className='bg-white rounded border p-2 text-sm border-black'>Open in Remix</button>
+                        <button className='bg-white rounded border p-2 text-sm border-black'>Copy to Clipboard</button>
+                        <button className='bg-white rounded border p-2 text-sm border-black'>Deploy!!</button>
+                    </div>
+                </div>
                 <div className="flex-1 flex flex-column bg-stone-500">
                     <div className="bg-red-500">
                         <TokenOption option={option} setOption={setOption}></TokenOption>
