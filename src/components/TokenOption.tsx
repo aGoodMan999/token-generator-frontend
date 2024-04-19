@@ -1,5 +1,40 @@
-import React from "react";
-const TokenOption: React.FC<{}> = () => {
+import React, { useState } from "react";
+import { Option } from "./Base";
+type TokenOptionProps = {
+    option: Option;
+    setOption: (option: Option) => void;
+}
+const TokenOption: React.FC<TokenOptionProps> = (props) => {
+    const { name, symbol, premint, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting } = props.option;
+    // HANDLE CHANGE
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, name: e.target.value });
+    }
+    const handleSymbolChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, symbol: e.target.value });
+    }
+    const handlePremintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === '') {
+            props.setOption({ ...props.option, premint: 0 });
+        }
+    }
+    const handleMintableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, ismintable: e.target.checked });
+    }
+    const handleBurnableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, isburnable: e.target.checked });
+    }
+    const handlePausableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, ispausable: e.target.checked });
+    }
+    const handlePermitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, ispermit: e.target.checked });
+    }
+    const handleFlashMintingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.setOption({ ...props.option, isflashmintable: e.target.checked });
+    }
+
+
     return (
         <div className="h-full p-2 gap-y-2 ps-4 flex flex-col bg-lime-100 devide-y divide-blue-200">
             {/* SETTING */}
@@ -9,16 +44,16 @@ const TokenOption: React.FC<{}> = () => {
                     <div className="flex gap-x-4">
                         <div className="">
                             <h2>Name</h2>
-                            <input type="text"></input>
+                            <input type="text" onChange={handleNameChange} value={name}></input>
                         </div>
                         <div className="">
                             <h2>Symbol</h2>
-                            <input type="text"></input>
+                            <input onChange={handleSymbolChange} type="text" value={symbol}></input>
                         </div>
                     </div>
                     <div>
                         <h2>Premint</h2>
-                        <input type="text"></input>
+                        <input onChange={handlePremintChange} type="text" value={premint}></input>
                     </div>
                 </div>
             </div>
@@ -27,19 +62,19 @@ const TokenOption: React.FC<{}> = () => {
                 <h1>Features</h1>
                 <div className="ms-2">
                     <div>
-                        <input id="mintable" type="checkbox"></input>
+                        <input id="mintable" type="checkbox" checked={ismintable} onChange={handleMintableChange}></input>
                         <label htmlFor="mintable">Mintable</label>
                     </div>   <div>
-                        <input id="burnable" type="checkbox"></input>
+                        <input id="burnable" onChange={handleBurnableChange} checked={isburnable} type="checkbox"></input>
                         <label htmlFor="burnable">Burnable</label>
                     </div>   <div>
-                        <input id="pausable" type="checkbox"></input>
+                        <input id="pausable" onChange={handlePausableChange} type="checkbox" checked={ispausable}></input>
                         <label htmlFor="pausable">Pausable</label>
                     </div>   <div>
-                        <input id="permit" type="checkbox"></input>
+                        <input id="permit" onChange={handlePermitChange} checked={ispermit} type="checkbox"></input>
                         <label htmlFor="permit">Permit</label>
                     </div>   <div>
-                        <input id="flashMinting" type="checkbox"></input>
+                        <input id="flashMinting" onChange={handleFlashMintingChange} checked={isflashMinting} type="checkbox"></input>
                         <label htmlFor="flashMinting">Flash Minting</label>
                     </div>
                 </div>
