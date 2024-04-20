@@ -1,6 +1,8 @@
-import React from "react";
-import HAMBURGER_ICON from "../assets/menu.png";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AccountContext } from "../context/AccountContext";
+import HAMBURGER_ICON from "../assets/menu.png";
+
 
 type LinkItem = {
     name: string;
@@ -15,7 +17,7 @@ const NAVBAR_LINK_ITEMS: LinkItem[] = [
 ]
 
 const NavBar1 = () => {
-
+    const { connectWallet } = useContext(AccountContext);
     const Menu = (e: React.MouseEvent<HTMLImageElement>) => {
         let list = document.querySelector('ul');
         console.log(list);
@@ -43,7 +45,7 @@ const NavBar1 = () => {
                         <a href="#" className="text-xl hover:text-cyan-500 duration-500">{item.name}</a>
                     </Link>
                 ))}
-                <button className="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
+                <button onClick={connectWallet} className="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
                     Get started
                 </button>
                 <h2 className=""></h2>
