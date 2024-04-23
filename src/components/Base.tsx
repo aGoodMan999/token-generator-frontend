@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TokenOption from "./TokenOption";
 import CodeViewer from "./CodeViewer";
+import { AccountContext } from '../context/AccountContext';
 
-export type Option = {
+export type TokenOptions = {
     name: string;
     symbol: string;
     premint: number;
@@ -14,7 +15,7 @@ export type Option = {
     ispermit: boolean;
     isflashmintable: boolean;
 }
-const INIT_OPTION: Option = {
+const INIT_OPTION: TokenOptions = {
     name: '',
     symbol: '',
     premint: 0,
@@ -27,9 +28,13 @@ const INIT_OPTION: Option = {
 }
 const Base = () => {
     const [code, setCode] = useState('');
-    const [option, setOption] = useState<Option>(INIT_OPTION);
+    const [option, setOption] = useState<TokenOptions>(INIT_OPTION);
+    const { deployToken } = useContext(AccountContext);
 
-    const getCode = async (option: Option) => {
+    const handleDeploy = () => {
+        deployToken(option);
+    }
+    const getCode = async (option: TokenOptions) => {
         try {
             const url = 'http://localhost:3002/code'
             const res = await axios.get(url, {
@@ -82,7 +87,7 @@ const Base = () => {
                         </button>
                         <button className='bg-white rounded border p-2 text-sm border-black'>Open in Remix</button>
                         <button className='bg-white rounded border p-2 text-sm border-black'>Copy to Clipboard</button>
-                        <button className='bg-white rounded border p-2 text-sm border-black'>Deploy!!</button>
+                        <button className='bg-white rounded border p-2 text-sm border-black' onClick={handleDeploy}>Deploy!!</button>
                     </div>
                 </div>
                 <div className="flex-1 flex flex-column bg-stone-500">

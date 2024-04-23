@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { JsonRpcSigner } from "@ethersproject/providers";
 import { AccountContext } from "../context/AccountContext";
 import HAMBURGER_ICON from "../assets/menu.png";
 
@@ -17,13 +18,27 @@ const NAVBAR_LINK_ITEMS: LinkItem[] = [
 ]
 
 const NavBar1 = () => {
-    const { connectWallet } = useContext(AccountContext);
+    const { connectWallet, addToken, getTokenList, account } = useContext(AccountContext);
+
+    const shortenAddress = (address: string) => { //This function is used to shorten the address (show only 6 first and 4 last characters)
+        return address.slice(0, 6) + '...' + address.slice(-4);
+    }
+
+    //TEST
+    const handleAddToken = () => {
+        addToken('0x5FbDB2315678afecb367f032d93F642f64180aa3');
+    }
+    const handleSeeToken = async () => {
+        const a = await getTokenList('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
+        console.log(a);
+    }
     const Menu = (e: React.MouseEvent<HTMLImageElement>) => {
         let list = document.querySelector('ul');
         console.log(list);
         e.currentTarget.id === 'menu' ? (e.currentTarget.id = "close", list?.classList.add('abcasdfasdfasdf'), list?.classList.add('opacity-100')) : (e.currentTarget.id = "menu", list?.classList.remove('top80px]'), list?.classList.remove('opacity-100'))
 
     }
+    //TEST
 
     return (
         <nav className="p-5 bg-white shadow md:flex md:items-center md:justify-between">
@@ -46,10 +61,11 @@ const NavBar1 = () => {
                     </Link>
                 ))}
                 <button onClick={connectWallet} className="bg-cyan-400 text-white font-[Poppins] duration-500 px-6 py-2 mx-4 hover:bg-cyan-500 rounded ">
-                    Get started
+                    {account ? shortenAddress(account) : 'CONNECT WALLET'}
                 </button>
-                <h2 className=""></h2>
             </ul>
+            <button className="hidden" onClick={handleAddToken}>ADD TOKEN</button>
+            <button className="hidden" onClick={handleSeeToken}>SEE TOKEN</button>
         </nav>
     )
 }
