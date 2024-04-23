@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import { Option } from "./Base";
+import { TokenOptions } from "./Base";
 type TokenOptionProps = {
-    option: Option;
-    setOption: (option: Option) => void;
+    option: TokenOptions;
+    setOption: (option: TokenOptions) => void;
 }
 const TokenOption: React.FC<TokenOptionProps> = (props) => {
     const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting } = props.option;
