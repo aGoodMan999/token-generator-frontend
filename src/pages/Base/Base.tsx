@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useContext, useEffect, useState } from "react";
-import TokenOption from "./TokenOption";
-import CodeViewer from "./CodeViewer";
-import { AccountContext } from '../context/AccountContext';
+import TokenOption from "./ChildComponents/TokenOption";
+import CodeViewer from "./ChildComponents/CodeViewer";
+import { AccountContext } from '../../context/AccountContext';
 
 export type TokenOptions = {
     name: string;
@@ -32,6 +32,14 @@ const Base = () => {
     const { deployToken } = useContext(AccountContext);
 
     const handleDeploy = () => {
+        if (option.name.length === 0) {
+            alert('Please fill the name field');
+            return;
+        }
+        if (option.name.includes(' ')) {
+            alert('Name should not contain space');
+            return;
+        }
         deployToken(option);
     }
     const getCode = async (option: TokenOptions) => {

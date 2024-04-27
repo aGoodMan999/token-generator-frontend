@@ -16,23 +16,6 @@ const CodeViewer: React.FC<CodeViewerProps> = (props) => {
         }
     }, [props.code]);
 
-    const code = `
-    // SPDX-License-Identifier: MIT
-    pragma solidity ^0.5.0;
-
-    contract SimpleStorage {
-        uint storedData;
-
-        function set(uint x) public {
-            storedData = x;
-        }
-
-        function get() public view returns (uint) {
-            return storedData;
-        }
-    }
-    `;
-
     return (
         <div className="h-full">
             <h1>CodeViewer</h1>

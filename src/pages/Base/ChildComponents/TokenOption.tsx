@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { TokenOptions } from "./Base";
+import { TokenOptions } from "../Base";
 type TokenOptionProps = {
     option: TokenOptions;
     setOption: (option: TokenOptions) => void;

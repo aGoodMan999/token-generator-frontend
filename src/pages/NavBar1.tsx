@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { JsonRpcSigner } from "@ethersproject/providers";
 import { AccountContext } from "../context/AccountContext";
+import { shortenAddress } from "../untils/functions/ShortenAddress";
 import HAMBURGER_ICON from "../assets/menu.png";
 
 
@@ -19,10 +19,6 @@ const NAVBAR_LINK_ITEMS: LinkItem[] = [
 
 const NavBar1 = () => {
     const { connectWallet, addToken, getTokenList, account } = useContext(AccountContext);
-
-    const shortenAddress = (address: string) => { //This function is used to shorten the address (show only 6 first and 4 last characters)
-        return address.slice(0, 6) + '...' + address.slice(-4);
-    }
 
     //TEST
     const handleAddToken = () => {

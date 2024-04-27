@@ -1,7 +1,7 @@
 import { Contract } from "ethers";
 import { createContext } from "react";
 import { JsonRpcSigner, JsonRpcProvider } from "@ethersproject/providers";
-import { TokenOptions } from "../components/Base";
+import { TokenOptions } from "../pages/Base/Base";
 export interface AccountContextType {
     account: string | null;
     connectWallet: () => void;

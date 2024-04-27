@@ -3,7 +3,7 @@ import { Contract, ethers } from "ethers";
 import { JsonRpcProvider, JsonRpcSigner } from '@ethersproject/providers';
 import { AccountContext } from "./AccountContext";
 import abi from '../untils/DeployedTokenManagement.json';
-import { TokenOptions } from "../components/Base";
+import { TokenOptions } from "../pages/Base/Base";
 import axios from "axios"
 
 declare global {
@@ -112,6 +112,7 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
                 setSigner(undefined);
                 setAccount(null);
                 let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
+                console.log('network', await tempProvider.getNetwork());
                 setProvider(tempProvider)
                 let signer = tempProvider.getSigner();
                 setSigner(signer);
@@ -166,39 +167,48 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
             alert('Please connect to the wallet first!');
             return;
         }
-        const compiledCode = await getCompiledCode(tokenOptions);
-        const abi = compiledCode.abi;
-        const contractByteCode = compiledCode.bytecode;
-        if (!signer) {
-            return;
+        try {
+            const compiledCode = await getCompiledCode(tokenOptions);
+            const abi = compiledCode.abi;
+            const contractByteCode = compiledCode.bytecode;
+            if (!signer) {
+                return;
+            }
+            console.log('Deploying contract with the account:', await signer.getAddress());
+
+            // Compile the contract
+            const factory = new ethers.ContractFactory(abi, contractByteCode, signer);
+
+            // Deploy the contract
+            const contract = await factory.deploy();
+
+            console.log(contract.deployTransaction);
+
+            // Wait for the contract to be mined
+
+            await contract.deployed();
+            //get the time when the contract is mined
+            const blockNumber = (await contract.deployTransaction.wait(1)).blockNumber;
+
+            await saveDeployment({
+                owner: account,
+                deployment: [{
+                    network: {
+                        chainId: (await provider?.getNetwork())?.chainId ?? null,
+                        name: (await provider?.getNetwork())?.name ?? null
+                    },
+                    name: tokenOptions.name,
+                    address: contract.address,
+                    deployHash: contract.deployTransaction.hash,
+                    blockNumber: blockNumber,
+                    abi: abi,
+                    bytecode: contractByteCode
+                }]
+            });
+
+        } catch (error) {
+            console.log(error);
         }
-        console.log('Deploying contract with the account:', await signer.getAddress());
-
-        // Compile the contract
-        const factory = new ethers.ContractFactory(abi, contractByteCode, signer);
-
-        // Deploy the contract
-        const contract = await factory.deploy();
-
-        console.log(contract.deployTransaction);
-
-        // Wait for the contract to be mined
-
-        await contract.deployed();
-        //get the time when the contract is mined
-        const blockNumber = (await contract.deployTransaction.wait(1)).blockNumber;
-
-        await saveDeployment({
-            owner: account,
-            deployment: [{
-                name: tokenOptions.name,
-                address: contract.address,
-                deployHash: contract.deployTransaction.hash,
-                blockNumber: blockNumber,
-                abi: abi,
-                bytecode: contractByteCode
-            }]
-        });
     }
     return (
         <AccountContext.Provider value={{
