@@ -16,6 +16,9 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
     const handlePremintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === '') {
             props.setOption({ ...props.option, premint: 0 });
+        } else {
+            props.setOption({ ...props.option, premint: parseInt(e.target.value) });
+
         }
     }
     const handleLicenseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
