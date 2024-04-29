@@ -147,6 +147,7 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
             return res.data;
         } catch (error) {
             console.log(error);
+            alert('Error when getting compiled code');
         }
     }
 
@@ -208,6 +209,7 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
 
         } catch (error) {
             console.log(error);
+
         }
     }
     return (
