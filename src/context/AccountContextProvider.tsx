@@ -171,16 +171,23 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
             const compiledCode = await getCompiledCode(tokenOptions);
             const abi = compiledCode.abi;
             const contractByteCode = compiledCode.bytecode;
+            let haveInitialOwnerArg = false;
             if (!signer) {
                 return;
             }
-            console.log('Deploying contract with the account:', await signer.getAddress());
 
+            const constructorAsAbi = abi.find((item: any) => (item["type"] === "constructor"));
+            //Handle trường hợp có thể constructor chứa argument (address initalOwner)
+            if (constructorAsAbi) {
+                if (constructorAsAbi["inputs"].find((item: any) => (item["name"] === "initialOwner" && item["internalType"] === "address"))) {
+                    haveInitialOwnerArg = true;
+                }
+            }
             // Compile the contract
             const factory = new ethers.ContractFactory(abi, contractByteCode, signer);
 
             // Deploy the contract
-            const contract = await factory.deploy();
+            const contract = haveInitialOwnerArg ? await factory.deploy(account) : await factory.deploy();
 
             console.log(contract.deployTransaction);
 
