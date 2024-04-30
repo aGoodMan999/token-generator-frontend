@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import TokenOption from "./ChildComponents/TokenOption";
 import CodeViewer from "./ChildComponents/CodeViewer";
 import { AccountContext } from '../../context/AccountContext';
+import Vote_Dev from '../../enums/Vote_Dev';
 
 export type TokenOptions = {
     name: string;
@@ -14,6 +15,7 @@ export type TokenOptions = {
     ispausable: boolean;
     ispermit: boolean;
     isflashmintable: boolean;
+    votes: Vote_Dev;
 }
 const INIT_OPTION: TokenOptions = {
     name: '',
@@ -24,7 +26,8 @@ const INIT_OPTION: TokenOptions = {
     isburnable: false,
     ispausable: false,
     ispermit: false,
-    isflashmintable: false
+    isflashmintable: false,
+    votes: Vote_Dev.NONE
 }
 const Base = () => {
     const [code, setCode] = useState('');
@@ -59,7 +62,8 @@ const Base = () => {
                     isburnable: option.isburnable ? 1 : 0,
                     ispausable: option.ispausable ? 1 : 0,
                     ispermit: option.ispermit ? 1 : 0,
-                    isflashmintable: option.isflashmintable ? 1 : 0
+                    isflashmintable: option.isflashmintable ? 1 : 0,
+                    votes: option.votes
                 }
             })
             console.log(res.data);

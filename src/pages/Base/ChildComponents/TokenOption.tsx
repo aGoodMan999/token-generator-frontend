@@ -1,12 +1,16 @@
-import React, { useRef } from "react";
+import React from "react";
 import { TokenOptions } from "../Base";
+import Vote_Dev from "../../../enums/Vote_Dev";
 type TokenOptionProps = {
     option: TokenOptions;
     setOption: (option: TokenOptions) => void;
 }
 const TokenOption: React.FC<TokenOptionProps> = (props) => {
-    const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting } = props.option;
+    const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting, votes } = props.option;
     // HANDLE CHANGE
+    const handleVoteChange = (votes: Vote_Dev) => {
+        props.setOption({ ...props.option, votes: votes })
+    }
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         props.setOption({ ...props.option, name: e.target.value });
     }
@@ -89,16 +93,16 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
             <div className="flex flex-col">
                 <div>
                     <label htmlFor="isVoted">Vote</label>
-                    <input id="isVoted" type="checkbox" className="rounded-full"></input>
+                    <input id="isVoted" type="checkbox" onChange={() => { handleVoteChange(votes === Vote_Dev.NONE ? Vote_Dev.BLOCK_NUMBER : Vote_Dev.NONE) }} checked={votes !== Vote_Dev.NONE} className="rounded-full"></input>
                 </div>
                 <div className="ms-2">
                     <div>
-                        <input id="blockNumber" type="checkbox" className="rounded-full"></input>
+                        <input id="blockNumber" type="radio" checked={votes === Vote_Dev.BLOCK_NUMBER} onChange={() => { handleVoteChange(1) }} name="voteType" className="rounded-full"></input>
                         <label htmlFor="blockNumber">Block Number</label>
                     </div>
                     <div>
-                        <input id="timeStampt" type="checkbox" className="rounded-full"></input>
-                        <label htmlFor="timeStampt">Timestamp</label>
+                        <input id="timeStamp" type="radio" checked={votes === Vote_Dev.TIMESTAMP} onChange={() => { handleVoteChange(2) }} name="voteType" className="rounded-full"></input>
+                        <label htmlFor="timeStamp">Timestamp</label>
                     </div>
                 </div>
             </div>
