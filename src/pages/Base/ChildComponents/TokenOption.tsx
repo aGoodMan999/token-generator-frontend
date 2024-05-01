@@ -1,13 +1,17 @@
 import React from "react";
 import { TokenOptions } from "../Base";
 import Vote_Dev from "../../../enums/Vote_Dev";
+import AccessControl_Dev from "../../../enums/AccessControl_Dev";
 type TokenOptionProps = {
     option: TokenOptions;
     setOption: (option: TokenOptions) => void;
 }
 const TokenOption: React.FC<TokenOptionProps> = (props) => {
-    const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting, votes } = props.option;
+    const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting, votes, accesscontrol } = props.option;
     // HANDLE CHANGE
+    const handleAccessControlChange = (ac: AccessControl_Dev) => {
+        props.setOption({ ...props.option, accesscontrol: ac });
+    }
     const handleVoteChange = (votes: Vote_Dev) => {
         props.setOption({ ...props.option, votes: votes })
     }
@@ -110,19 +114,19 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
             <div className="flex flex-col">
                 <div>
                     <label htmlFor="accesscontrol">Access control</label>
-                    <input id="accesscontrol" type="checkbox" className="rounded-full"></input>
+                    <input id="accesscontrol" type="checkbox" onChange={() => handleAccessControlChange(accesscontrol === AccessControl_Dev.NONE ? AccessControl_Dev.OWNABLE : AccessControl_Dev.NONE)} checked={props.option.accesscontrol !== AccessControl_Dev.NONE} className="rounded-full"></input>
                 </div>
                 <div className="ms-2">
                     <div>
-                        <input id="blocknumber" type="checkbox" className="rounded-full"></input>
+                        <input id="blocknumber" type="radio" checked={props.option.accesscontrol === AccessControl_Dev.OWNABLE} name="accessControlType" onChange={() => { handleAccessControlChange(1) }} className="rounded-full"></input>
                         <label htmlFor="blocknumber">Ownable</label>
                     </div>
                     <div>
-                        <input id="roles" type="checkbox" className="rounded-full"></input>
+                        <input id="roles" type="radio" checked={props.option.accesscontrol === AccessControl_Dev.ROLES} name="accessControlType" onChange={() => { handleAccessControlChange(2) }} className="rounded-full"></input>
                         <label htmlFor="roles">Roles</label>
                     </div>
                     <div>
-                        <input id="managed" type="checkbox" className="rounded-full"></input>
+                        <input id="managed" type="radio" checked={props.option.accesscontrol === AccessControl_Dev.MANAGED} name="accessControlType" onChange={() => { handleAccessControlChange(3) }} className="rounded-full"></input>
                         <label htmlFor="managed">Managed</label>
                     </div>
                 </div>
