@@ -34,7 +34,7 @@ const AccountDeployment: React.FC<AccountDeploymentProps> = () => {
 
             <div className={`mt-2 grid gap-2 grid-cols-4`}>
                 {accountDeployment && accountDeployment.deployment?.map((d, idx) =>
-                    <DeploymentCard chainId={d.network?.chainId ?? null} networkName={d.network?.name ?? null} name={d.name ?? ''} address={d.address ?? ''} hashs={d.deployHash ?? ''} blockNumber={d.blockNumber ?? 0} />
+                    <DeploymentCard key={idx} chainId={d.network?.chainId ?? null} networkName={d.network?.name ?? null} name={d.name ?? ''} address={d.address ?? ''} hashs={d.deployHash ?? ''} blockNumber={d.blockNumber ?? 0} />
                 )}
             </div>
         </div>
