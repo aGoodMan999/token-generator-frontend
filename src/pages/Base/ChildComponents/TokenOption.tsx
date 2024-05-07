@@ -10,6 +10,11 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
     const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting, votes, accesscontrol } = props.option;
     // HANDLE CHANGE
     const handleAccessControlChange = (ac: AccessControl_Dev) => {
+        if (ac === AccessControl_Dev.NONE && props.option.ismintable) {
+            alert("You can't disable access control when mintable is enabled");
+            return;
+
+        }
         props.setOption({ ...props.option, accesscontrol: ac });
     }
     const handleVoteChange = (votes: Vote_Dev) => {
@@ -33,7 +38,13 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
         props.setOption({ ...props.option, license: e.target.value })
     }
     const handleMintableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        props.setOption({ ...props.option, ismintable: e.target.checked });
+        console.log("Mintable change");
+        if (accesscontrol === AccessControl_Dev.NONE) {
+            console.log("Access control is none");
+            props.setOption({ ...props.option, accesscontrol: AccessControl_Dev.OWNABLE, ismintable: e.target.checked });
+        } else {
+            props.setOption({ ...props.option, ismintable: e.target.checked });
+        }
     }
     const handleBurnableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         props.setOption({ ...props.option, isburnable: e.target.checked });
