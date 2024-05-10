@@ -13,7 +13,11 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
         if (ac === AccessControl_Dev.NONE && props.option.ismintable) {
             alert("You can't disable access control when mintable is enabled");
             return;
+        }
 
+        if (ac === AccessControl_Dev.NONE && props.option.ispausable) {
+            alert("You can't disable access control when pausable is enabled");
+            return;
         }
         props.setOption({ ...props.option, accesscontrol: ac });
     }
@@ -50,6 +54,11 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
         props.setOption({ ...props.option, isburnable: e.target.checked });
     }
     const handlePausableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (accesscontrol === AccessControl_Dev.NONE) {
+            props.setOption({ ...props.option, ispausable: e.target.checked, accesscontrol: AccessControl_Dev.OWNABLE });
+            return;
+        }
+
         props.setOption({ ...props.option, ispausable: e.target.checked });
     }
     const handlePermitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
