@@ -2,11 +2,11 @@ import React from "react";
 import { TokenOptions } from "../Base";
 import Vote_Dev from "../../../enums/Vote_Dev";
 import AccessControl_Dev from "../../../enums/AccessControl_Dev";
-type TokenOptionProps = {
+type ERC20TokenOptionProps = {
     option: TokenOptions;
-    setOption: (option: TokenOptions) => void;
+    setOption: Function;
 }
-const TokenOption: React.FC<TokenOptionProps> = (props) => {
+const ERC20TokenOption: React.FC<ERC20TokenOptionProps> = (props) => {
     const { name, symbol, premint, license, ismintable, isburnable, ispausable, ispermit, isflashmintable: isflashMinting, votes, accesscontrol } = props.option;
     // HANDLE CHANGE
     const handleAccessControlChange = (ac: AccessControl_Dev) => {
@@ -186,4 +186,4 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
         </div>
     )
 }
-export default TokenOption;
+export default ERC20TokenOption;

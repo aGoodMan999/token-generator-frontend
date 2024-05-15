@@ -127,11 +127,12 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
         }
     }
 
-    const getCompiledCode = async (option: TokenOptions) => {
+    const getCompiledCode = async (option: TokenOptions, tokenType: String) => {
         try {
             const url = 'http://localhost:3002/code/get-compiled-code';
             const res = await axios.get(url, {
                 params: {
+                    tokentype: tokenType,
                     name: option.name,
                     symbol: option.symbol,
                     premint: option.premint,
@@ -162,13 +163,13 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
             console.log(error);
         }
     }
-    const deployToken = async (tokenOptions: TokenOptions) => {
+    const deployToken = async (tokenOptions: TokenOptions, tokenType: String) => {
         if (!account) {
             alert('Please connect to the wallet first!');
             return;
         }
         try {
-            const compiledCode = await getCompiledCode(tokenOptions);
+            const compiledCode = await getCompiledCode(tokenOptions, tokenType);
             const abi = compiledCode.abi;
             const contractByteCode = compiledCode.bytecode;
             let haveInitialOwnerArg = false;
