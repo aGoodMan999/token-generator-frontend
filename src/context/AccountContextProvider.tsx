@@ -90,7 +90,6 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
             await contract.addToken(tokenAddress);
         } catch (error) {
             console.log(error);
-            alert("User has reject the transaction")
         }
     }
 
@@ -102,7 +101,7 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
         } catch (error) {
             console.log(error);
         }
-        return res as number;
+        return (res as number);
     }
 
     const updateEthers = async () => {
@@ -197,7 +196,8 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
             await contract.deployed();
             //get the time when the contract is mined
             const blockNumber = (await contract.deployTransaction.wait(1)).blockNumber;
-
+            const block = await provider?.getBlock(blockNumber);
+            console.log("time", block?.timestamp);
             await saveDeployment({
                 owner: account,
                 deployment: [{
@@ -209,6 +209,7 @@ const AccountContextProvider: React.FC<AccountContextProviderProps> = (props) =>
                     address: contract.address,
                     deployHash: contract.deployTransaction.hash,
                     blockNumber: blockNumber,
+                    timeStamp: block?.timestamp,
                     abi: abi,
                     bytecode: contractByteCode
                 }]

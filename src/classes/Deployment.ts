@@ -9,6 +9,7 @@ type Deployment = {
         address?: string;
         deployHash?: string;
         blockNumber?: number;
+        timeStamp?: number;
         abi?: [];
         bytecode?: string;
     },]

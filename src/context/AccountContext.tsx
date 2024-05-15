@@ -1,15 +1,16 @@
 import { Contract } from "ethers";
 import { createContext } from "react";
 import { JsonRpcSigner, JsonRpcProvider } from "@ethersproject/providers";
-import { TokenOptions } from "../pages/Base/Base";
+
 export interface AccountContextType {
     account: string | null;
-    connectWallet: () => void;
-    updateEthers: () => void;
-    accountChangeHandler: (account: string) => void;
-    addToken: (tokenAddress: string) => void;
-    getTokenList: (owner: string) => number;
-    deployToken: (tokenOptions: TokenOptions) => Contract;
+    connectWallet: Function;
+    updateEthers: Function;
+    accountChangeHandler: Function;
+    addToken: Function;
+    getTokenList: Function;
+    deployToken: Function;
+    saveDeployment: Function;
     provider?: JsonRpcProvider;
     signer?: JsonRpcSigner;
     contract: any;
@@ -20,8 +21,9 @@ const INIT_VALUE: AccountContextType = {
     updateEthers: () => { },
     accountChangeHandler: () => { },
     addToken: () => { },
-    getTokenList: () => { return -1 },
-    deployToken: () => { return new Contract("", "") },
+    getTokenList: () => { },
+    deployToken: () => { },
+    saveDeployment: () => { },
     contract: null
 }
 export const AccountContext = createContext(
