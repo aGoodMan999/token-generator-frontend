@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import 'flowbite';
 import './App.css'
 import NavBar1 from './pages/NavBar1'
 import Base from './pages/Base/Base'
