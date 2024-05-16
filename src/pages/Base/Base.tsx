@@ -1,96 +1,108 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import TokenOption from "./ChildComponents/TokenOption";
-import CodeViewer from "./ChildComponents/CodeViewer";
-import { AccountContext } from "../../context/AccountContext";
-import Vote_Dev from "../../enums/Vote_Dev";
-import AccessControl_Dev from "../../enums/AccessControl_Dev";
 import { PopupModal } from "./ChildComponents/PopupModal";
+import { useContext, useEffect, useState } from "react";
+import { AccountContext } from '../../context/AccountContext';
+import Vote_Dev from '../../enums/Vote_Dev';
+import AccessControl_Dev from '../../enums/AccessControl_Dev';
+import ERC20 from './ChildComponents/ERC20';
+import ERC721 from './ChildComponents/ERC721';
 
 export type TokenOptions = {
   name: string;
   symbol: string;
-  premint: number;
+  premint?: number;
   license: string;
+  baseuri?: string
+  votes: Vote_Dev;
+  accesscontrol: AccessControl_Dev;
   ismintable: boolean;
   isburnable: boolean;
   ispausable: boolean;
-  ispermit: boolean;
-  isflashmintable: boolean;
-  votes: Vote_Dev;
-  accesscontrol: AccessControl_Dev;
-};
+  ispermit?: boolean;
+  isflashmintable?: boolean;
+  isenumerable?: boolean;
+  isuristorage?: boolean;
+  isautoincrementids?: boolean;
+}
 const INIT_OPTION: TokenOptions = {
-  name: "",
-  symbol: "",
+  name: '',
+  symbol: '',
   premint: 0,
-  license: "MIT",
+  license: 'MIT',
+  votes: Vote_Dev.NONE,
+  accesscontrol: AccessControl_Dev.NONE,
   ismintable: false,
   isburnable: false,
   ispausable: false,
   ispermit: false,
   isflashmintable: false,
-  votes: Vote_Dev.NONE,
-  accesscontrol: AccessControl_Dev.NONE,
-};
+  isenumerable: false,
+  isuristorage: false,
+  isautoincrementids: false
+}
+enum TokenType { ERC20 = 'ERC20', ERC721 = 'ERC721' };
+
 const Base = () => {
-  const [code, setCode] = useState("");
-  const [option, setOption] = useState<TokenOptions>(INIT_OPTION);
   const { deployToken } = useContext(AccountContext);
+  const [tokenType, setTokenType] = useState<TokenType>(TokenType.ERC20);
+  const [option, setOption] = useState<TokenOptions>(INIT_OPTION);
+  const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeloySuccess, setIsDeloySucess] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const handleDeploy = async () => {
-    setIsLoading(true);
-    try {
-      if (option.name.length === 0) {
-        alert("Please fill the name field");
-        return;
-      }
-      if (option.name.includes(" ")) {
-        alert("Name should not contain space");
-        return;
-      }
-      await deployToken(option);
-      setIsDeloySucess(true);
-      setShowModal(true);
-    } catch (e) {
-      console.log(e);
-      setIsDeloySucess(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  useEffect(() => {
+    getCode(option);
+  }, [option]);
+
+
   const getCode = async (option: TokenOptions) => {
     try {
-      const url = "http://localhost:3002/code";
+      const url = `http://localhost:3002/code/${tokenType}`
       const res = await axios.get(url, {
         //Set the Access-Control-Allow-Origin header on the server to allow the client to make cross-origin requests
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Origin': '*'
         },
         params: {
+          tokentype: tokenType,
           name: option.name,
           symbol: option.symbol,
           premint: option.premint,
           license: option.license,
+          baseuri: option.baseuri,
           ismintable: option.ismintable ? 1 : 0,
           isburnable: option.isburnable ? 1 : 0,
           ispausable: option.ispausable ? 1 : 0,
           ispermit: option.ispermit ? 1 : 0,
           isflashmintable: option.isflashmintable ? 1 : 0,
+          isenumerable: option.isenumerable ? 1 : 0,
+          isuristorage: option.isuristorage ? 1 : 0,
+          isautoincrementids: option.isautoincrementids ? 1 : 0,
           votes: option.votes,
-          accesscontrol: option.accesscontrol,
-        },
-      });
+          accesscontrol: option.accesscontrol
+        }
+      })
       console.log(res.data);
       setCode(res.data.contract);
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
+  // useEffect(() => {
+  //     const option: TokenOption = {
+  //         name: 'TestToken',
+  //         symbol: 'TT',
+  //         premint: 1000000,
+  //         mintable: true,
+  //         burnable: true,
+  //         pausable: true,
+  //         permit: true,
+  //         flashMinting: true
+  //     }
+  //     getCode(option);
+  // }, []);
   const handleCopyToClipboard = () => {
     const textArea = document.createElement("textarea");
     textArea.value = code;
@@ -114,6 +126,27 @@ const Base = () => {
     }
   };
 
+  const handleDeploy = async () => {
+    setIsLoading(true);
+    try {
+      if (option.name.length === 0) {
+        alert("Please fill the name field");
+        return;
+      }
+      if (option.name.includes(" ")) {
+        alert("Name should not contain space");
+        return;
+      }
+      await deployToken(option, tokenType);
+      setIsDeloySucess(true);
+      setShowModal(true);
+    } catch (e) {
+      console.log(e);
+      setIsDeloySucess(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleOpenInRemix = async () => {
     try {
       // Prepare the code to share with Remix
@@ -160,12 +193,19 @@ const Base = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
-  useEffect(() => {
-    getCode(option);
-  }, [option]);
+  // const handleDeploy = () => {
+  //   if (option.name.length === 0) {
+  //     alert('Please fill the name field');
+  //     return;
+  //   }
+  //   if (option.name.includes(' ')) {
+  //     alert('Name should not contain space');
+  //     return;
+  //   }
+  //   deployToken(option, tokenType);
+  // }
   return (
-    <div>
+    <>
       {showModal && (
         <PopupModal
           type={isDeloySuccess ? "success" : "failed"}
@@ -173,80 +213,86 @@ const Base = () => {
         />
       )}
       <div className="h-full bg-lime-500">
+
         <div className="flex flex-col h-full">
           <div className="block bg-red-100">
-            <div className="flex justify-end gap-2 w-full p-3 bg-green-500">
-              <button
-                className="bg-white rounded border p-2 text-sm border-black"
-                onClick={handleDownload}
-              >
-                Download
-              </button>
-              <button
-                className="bg-white rounded border p-2 text-sm border-black"
-                onClick={handleOpenInRemix}
-              >
-                Open in Remix
-              </button>
-              <button
-                className="bg-white rounded border p-2 text-sm border-black"
-                onClick={handleCopyToClipboard}
-              >
-                Copy to Clipboard
-              </button>
-              {/* <button
+            <div className='flex gap-2 w-full p-3 bg-green-500'>
+              <div className='flex gap-1'>
+                <button className={`${tokenType === TokenType.ERC20 ? "bg-blue-700" : "bg-white"} rounded border p-2 text-sm border-black`} disabled={tokenType === TokenType.ERC20} onClick={() => setTokenType(TokenType.ERC20)}>ERC20</button>
+                <button className={`${tokenType === TokenType.ERC721 ? "bg-blue-700" : "bg-white"} rounded border p-2 text-sm border-black`} disabled={tokenType === TokenType.ERC721} onClick={() => setTokenType(TokenType.ERC721)}>ERC721</button>
+              </div>
+              <div className='flex-1'></div>
+              <div className="flex justify-end gap-2 w-full p-3 bg-green-500">
+                <button
+                  className="bg-white rounded border p-2 text-sm border-black"
+                  onClick={handleDownload}
+                >
+                  Download
+                </button>
+                <button
+                  className="bg-white rounded border p-2 text-sm border-black"
+                  onClick={handleOpenInRemix}
+                >
+                  Open in Remix
+                </button>
+                <button
+                  className="bg-white rounded border p-2 text-sm border-black"
+                  onClick={handleCopyToClipboard}
+                >
+                  Copy to Clipboard
+                </button>
+                {/* <button
                 className="bg-white rounded border p-2 text-sm border-black"
                 onClick={handleDeploy}
               >
                 Deploy!!
               </button> */}
-              <button
-                type="button"
-                className="flex items-center bg-white rounded border p-2 text-sm border-black"
-                onClick={handleDeploy}
-                disabled={isLoading}
-              >
-                {isLoading && (
-                  <svg
-                    className="mr-3 h-5 w-5 animate-spin text-green"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                )}
-                <span className="font-medium">
-                  {" "}
-                  {isLoading ? "Deloying..." : "Deloy!"}
-                </span>
-              </button>
+                <button
+                  type="button"
+                  className="flex items-center bg-white rounded border p-2 text-sm border-black"
+                  onClick={handleDeploy}
+                  disabled={isLoading}
+                >
+                  {isLoading && (
+                    <svg
+                      className="mr-3 h-5 w-5 animate-spin text-green"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  )}
+                  <span className="font-medium">
+                    {" "}
+                    {isLoading ? "Deloying..." : "Deloy!"}
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex-1 flex flex-column bg-stone-500">
-            <div className="bg-red-500">
-              <TokenOption option={option} setOption={setOption}></TokenOption>
-            </div>
-            <div className="flex-1">
-              <CodeViewer code={code}></CodeViewer>
-            </div>
+            {tokenType === TokenType.ERC20 ?
+              <ERC20 option={option} setOption={setOption} code={code}></ERC20>
+              :
+              <ERC721 option={option} setOption={setOption} code={code}></ERC721>}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
-};
+}
 
 export default Base;

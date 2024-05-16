@@ -1,14 +1,13 @@
 import React from "react";
+import Tooltip from "./Tooltip";
 import { TokenOptions } from "../Base";
 import Vote_Dev from "../../../enums/Vote_Dev";
 import AccessControl_Dev from "../../../enums/AccessControl_Dev";
-import Tooltip from "./Tooltip";
-
 type TokenOptionProps = {
   option: TokenOptions;
   setOption: (option: TokenOptions) => void;
 };
-const TokenOption: React.FC<TokenOptionProps> = (props) => {
+const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
   const {
     name,
     symbol,
@@ -383,4 +382,4 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
     </div>
   );
 };
-export default TokenOption;
+export default ERC20TokenOption;

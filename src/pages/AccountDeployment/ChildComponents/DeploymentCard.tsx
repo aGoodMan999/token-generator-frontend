@@ -38,13 +38,19 @@ type DeploymentCardProps = {
   address: string;
   hashs: string;
   blockNumber: number;
-  chainId: number | null;
-  networkName: string | null;
-};
-
+  chainId: number;
+  networkName: string;
+  timeStamp: number;
+}
 const DeploymentCard: React.FC<DeploymentCardProps> = (props) => {
   const { account } = useContext(AccountContext);
-
+  const date = new Date(props.timeStamp * 1000);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
   return (
     <div className="flex justify-center">
       <div className="max-w-md rounded overflow-hidden shadow-lg">
@@ -56,10 +62,13 @@ const DeploymentCard: React.FC<DeploymentCardProps> = (props) => {
           <div className="mb-2">Deploy hash: {shortenAddress(props.hashs)}</div>
           <div className="mb-2">Chain ID: {props.chainId}</div>
           <div className="mb-2">Network Name: {props.networkName}</div>
+          <div className="mb-2">Created: {day}-{month}-{year}::{seconds}-{minutes}-{hours}</div>
+
         </div>
       </div>
     </div>
   );
 };
+
 
 export default DeploymentCard;
