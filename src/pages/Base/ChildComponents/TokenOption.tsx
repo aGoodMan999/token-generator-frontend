@@ -76,256 +76,309 @@ const TokenOption: React.FC<TokenOptionProps> = (props) => {
   };
 
   return (
-    <div className="h-full p-2 gap-y-2 ps-4 flex flex-col bg-lime-100 devide-y divide-blue-200">
+    <div className="token-option-container">
       {/* SETTING */}
       <div id="setting">
-        <h1>Setting</h1>
-        <div className="ms-2">
-          <div className="flex gap-x-4">
-            <div className="">
-              <h2>Name</h2>
-              <input
-                type="text"
-                onChange={handleNameChange}
-                value={name}
-              ></input>
+        <aside
+          id="default-sidebar"
+          className=" top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0"
+          aria-label="Sidebar"
+        >
+          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+            {/* <ul className="space-y-2 font-medium"></ul> */}
+            <h1>Setting</h1>
+            <div className="ms-2">
+              <div className="grid gap-3 mb-6 md:grid-cols-3">
+                <div className="md:col-span-2">
+                  <label
+                    htmlFor="name"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Name
+                  </label>
+                  <input
+                    onChange={handleNameChange}
+                    value={name}
+                    type="text"
+                    id="name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="John"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="symbol"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Symbol
+                  </label>
+                  <input
+                    onChange={handleSymbolChange}
+                    value={symbol}
+                    type="text"
+                    id="name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="MKT"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="premint"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Premint
+                </label>
+                <input
+                  onChange={handlePermitChange}
+                  value={premint}
+                  type="text"
+                  id="premint"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="0"
+                  required
+                />
+                {/* </div> */}
+              </div>
             </div>
-            <div className="">
-              <h2>Symbol</h2>
-              <input
-                onChange={handleSymbolChange}
-                type="text"
-                value={symbol}
-              ></input>
+            {/* FEATURES */}
+            <div className="flex flex-col">
+              <h1>Features</h1>
+              <div className="ms-2">
+                <div className="flex items-center gap-x-4">
+                  <input
+                    id="mintable"
+                    type="checkbox"
+                    checked={ismintable}
+                    onChange={handleMintableChange}
+                  ></input>
+                  <label htmlFor="mintable">Mintable</label>
+                  <Tooltip message="Mintable" />
+                </div>{" "}
+                <div className="flex items-center gap-x-4">
+                  <input
+                    id="burnable"
+                    onChange={handleBurnableChange}
+                    checked={isburnable}
+                    type="checkbox"
+                  ></input>
+                  <label htmlFor="burnable">Burnable</label>
+                  <Tooltip message="Burnable " />
+                </div>{" "}
+                <div>
+                  <input
+                    id="pausable"
+                    onChange={handlePausableChange}
+                    type="checkbox"
+                    checked={ispausable}
+                  ></input>
+                  <label htmlFor="pausable">Pausable</label>
+                </div>{" "}
+                <div>
+                  <input
+                    id="permit"
+                    onChange={handlePermitChange}
+                    checked={ispermit}
+                    type="checkbox"
+                  ></input>
+                  <label htmlFor="permit">Permit</label>
+                </div>{" "}
+                <div>
+                  <input
+                    id="flashMinting"
+                    onChange={handleFlashMintingChange}
+                    checked={isflashMinting}
+                    type="checkbox"
+                  ></input>
+                  <label htmlFor="flashMinting">Flash Minting</label>
+                </div>
+              </div>
+            </div>
+            {/* VOTE */}
+            <div className="flex flex-col">
+              <div>
+                <label htmlFor="isVoted">Vote</label>
+                <input
+                  id="isVoted"
+                  type="checkbox"
+                  onChange={() => {
+                    handleVoteChange(
+                      votes === Vote_Dev.NONE
+                        ? Vote_Dev.BLOCK_NUMBER
+                        : Vote_Dev.NONE
+                    );
+                  }}
+                  checked={votes !== Vote_Dev.NONE}
+                  className="rounded-full"
+                ></input>
+              </div>
+              <div className="ms-2">
+                <div>
+                  <input
+                    id="blockNumber"
+                    type="radio"
+                    checked={votes === Vote_Dev.BLOCK_NUMBER}
+                    onChange={() => {
+                      handleVoteChange(1);
+                    }}
+                    name="voteType"
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="blockNumber">Block Number</label>
+                </div>
+                <div>
+                  <input
+                    id="timeStamp"
+                    type="radio"
+                    checked={votes === Vote_Dev.TIMESTAMP}
+                    onChange={() => {
+                      handleVoteChange(2);
+                    }}
+                    name="voteType"
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="timeStamp">Timestamp</label>
+                </div>
+              </div>
+            </div>
+            {/* ACCESS CONTROL */}
+            <div className="flex flex-col">
+              <div>
+                <label htmlFor="accesscontrol">Access control</label>
+                <input
+                  id="accesscontrol"
+                  type="checkbox"
+                  onChange={() =>
+                    handleAccessControlChange(
+                      accesscontrol === AccessControl_Dev.NONE
+                        ? AccessControl_Dev.OWNABLE
+                        : AccessControl_Dev.NONE
+                    )
+                  }
+                  checked={
+                    props.option.accesscontrol !== AccessControl_Dev.NONE
+                  }
+                  className="rounded-full"
+                ></input>
+              </div>
+              <div className="ms-2">
+                <div>
+                  <input
+                    id="blocknumber"
+                    type="radio"
+                    checked={
+                      props.option.accesscontrol === AccessControl_Dev.OWNABLE
+                    }
+                    name="accessControlType"
+                    onChange={() => {
+                      handleAccessControlChange(1);
+                    }}
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="blocknumber">Ownable</label>
+                </div>
+                <div>
+                  <input
+                    id="roles"
+                    type="radio"
+                    checked={
+                      props.option.accesscontrol === AccessControl_Dev.ROLES
+                    }
+                    name="accessControlType"
+                    onChange={() => {
+                      handleAccessControlChange(2);
+                    }}
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="roles">Roles</label>
+                </div>
+                <div>
+                  <input
+                    id="managed"
+                    type="radio"
+                    checked={
+                      props.option.accesscontrol === AccessControl_Dev.MANAGED
+                    }
+                    name="accessControlType"
+                    onChange={() => {
+                      handleAccessControlChange(3);
+                    }}
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="managed">Managed</label>
+                </div>
+              </div>
+            </div>
+            {/* UPGRADEABILITY */}
+            <div className="flex flex-col">
+              <div>
+                <label htmlFor="upgradeability">Upgradeability</label>
+                <input
+                  id="upgradeability"
+                  type="checkbox"
+                  className="rounded-full"
+                ></input>
+              </div>
+              <div className="ms-2">
+                <div>
+                  <input
+                    id="transparent"
+                    type="checkbox"
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="transparent">Transparent</label>
+                </div>
+                <div>
+                  <input
+                    id="uups"
+                    type="checkbox"
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="uups">UUPS</label>
+                </div>
+                <div>
+                  <input
+                    id="managed"
+                    type="checkbox"
+                    className="rounded-full"
+                  ></input>
+                  <label htmlFor="managed">Managed</label>
+                </div>
+              </div>
+            </div>
+            {/* INFO */}
+            <div className="flex flex-col w-fit">
+              <div>
+                <label className="block" htmlFor="securityContact">
+                  Security contact
+                </label>
+                <input
+                  id="securityContact"
+                  placeholder="security@example.com"
+                  type="text"
+                  className="rounded indent-2"
+                ></input>
+              </div>
+              <div>
+                <label className="block" htmlFor="license">
+                  License
+                </label>
+                <input
+                  id="license"
+                  type="text"
+                  className="rounded indent-2"
+                  placeholder="MIT"
+                  onChange={handleLicenseChange}
+                  value={license}
+                ></input>
+              </div>
             </div>
           </div>
-          <div>
-            <h2>Premint</h2>
-            <input
-              onChange={handlePremintChange}
-              type="text"
-              value={premint}
-            ></input>
-          </div>
-        </div>
-      </div>
-      {/* FEATURES */}
-      <div className="flex flex-col">
-        <h1>Features</h1>
-        <div className="ms-2">
-          <div className="flex items-center gap-x-4">
-            <input
-              id="mintable"
-              type="checkbox"
-              checked={ismintable}
-              onChange={handleMintableChange}
-            ></input>
-            <label htmlFor="mintable">Mintable</label>
-            <Tooltip message="Mintable" />
-          </div>{" "}
-          <div className="flex items-center gap-x-4">
-            <input
-              id="burnable"
-              onChange={handleBurnableChange}
-              checked={isburnable}
-              type="checkbox"
-            ></input>
-            <label htmlFor="burnable"></label>
-            Burnable <Tooltip message="Burnable " />
-          </div>{" "}
-          <div>
-            <input
-              id="pausable"
-              onChange={handlePausableChange}
-              type="checkbox"
-              checked={ispausable}
-            ></input>
-            <label htmlFor="pausable">Pausable</label>
-          </div>{" "}
-          <div>
-            <input
-              id="permit"
-              onChange={handlePermitChange}
-              checked={ispermit}
-              type="checkbox"
-            ></input>
-            <label htmlFor="permit">Permit</label>
-          </div>{" "}
-          <div>
-            <input
-              id="flashMinting"
-              onChange={handleFlashMintingChange}
-              checked={isflashMinting}
-              type="checkbox"
-            ></input>
-            <label htmlFor="flashMinting">Flash Minting</label>
-          </div>
-        </div>
-      </div>
-      {/* VOTE */}
-      <div className="flex flex-col">
-        <div>
-          <label htmlFor="isVoted">Vote</label>
-          <input
-            id="isVoted"
-            type="checkbox"
-            onChange={() => {
-              handleVoteChange(
-                votes === Vote_Dev.NONE ? Vote_Dev.BLOCK_NUMBER : Vote_Dev.NONE
-              );
-            }}
-            checked={votes !== Vote_Dev.NONE}
-            className="rounded-full"
-          ></input>
-        </div>
-        <div className="ms-2">
-          <div>
-            <input
-              id="blockNumber"
-              type="radio"
-              checked={votes === Vote_Dev.BLOCK_NUMBER}
-              onChange={() => {
-                handleVoteChange(1);
-              }}
-              name="voteType"
-              className="rounded-full"
-            ></input>
-            <label htmlFor="blockNumber">Block Number</label>
-          </div>
-          <div>
-            <input
-              id="timeStamp"
-              type="radio"
-              checked={votes === Vote_Dev.TIMESTAMP}
-              onChange={() => {
-                handleVoteChange(2);
-              }}
-              name="voteType"
-              className="rounded-full"
-            ></input>
-            <label htmlFor="timeStamp">Timestamp</label>
-          </div>
-        </div>
-      </div>
-      {/* ACCESS CONTROL */}
-      <div className="flex flex-col">
-        <div>
-          <label htmlFor="accesscontrol">Access control</label>
-          <input
-            id="accesscontrol"
-            type="checkbox"
-            onChange={() =>
-              handleAccessControlChange(
-                accesscontrol === AccessControl_Dev.NONE
-                  ? AccessControl_Dev.OWNABLE
-                  : AccessControl_Dev.NONE
-              )
-            }
-            checked={props.option.accesscontrol !== AccessControl_Dev.NONE}
-            className="rounded-full"
-          ></input>
-        </div>
-        <div className="ms-2">
-          <div>
-            <input
-              id="blocknumber"
-              type="radio"
-              checked={props.option.accesscontrol === AccessControl_Dev.OWNABLE}
-              name="accessControlType"
-              onChange={() => {
-                handleAccessControlChange(1);
-              }}
-              className="rounded-full"
-            ></input>
-            <label htmlFor="blocknumber">Ownable</label>
-          </div>
-          <div>
-            <input
-              id="roles"
-              type="radio"
-              checked={props.option.accesscontrol === AccessControl_Dev.ROLES}
-              name="accessControlType"
-              onChange={() => {
-                handleAccessControlChange(2);
-              }}
-              className="rounded-full"
-            ></input>
-            <label htmlFor="roles">Roles</label>
-          </div>
-          <div>
-            <input
-              id="managed"
-              type="radio"
-              checked={props.option.accesscontrol === AccessControl_Dev.MANAGED}
-              name="accessControlType"
-              onChange={() => {
-                handleAccessControlChange(3);
-              }}
-              className="rounded-full"
-            ></input>
-            <label htmlFor="managed">Managed</label>
-          </div>
-        </div>
-      </div>
-      {/* UPGRADEABILITY */}
-      <div className="flex flex-col">
-        <div>
-          <label htmlFor="upgradeability">Upgradeability</label>
-          <input
-            id="upgradeability"
-            type="checkbox"
-            className="rounded-full"
-          ></input>
-        </div>
-        <div className="ms-2">
-          <div>
-            <input
-              id="transparent"
-              type="checkbox"
-              className="rounded-full"
-            ></input>
-            <label htmlFor="transparent">Transparent</label>
-          </div>
-          <div>
-            <input id="uups" type="checkbox" className="rounded-full"></input>
-            <label htmlFor="uups">UUPS</label>
-          </div>
-          <div>
-            <input
-              id="managed"
-              type="checkbox"
-              className="rounded-full"
-            ></input>
-            <label htmlFor="managed">Managed</label>
-          </div>
-        </div>
-      </div>
-      {/* INFO */}
-      <div className="flex flex-col w-fit">
-        <div>
-          <label className="block" htmlFor="securityContact">
-            Security contact
-          </label>
-          <input
-            id="securityContact"
-            placeholder="security@example.com"
-            type="text"
-            className="rounded indent-2"
-          ></input>
-        </div>
-        <div>
-          <label className="block" htmlFor="license">
-            License
-          </label>
-          <input
-            id="license"
-            type="text"
-            className="rounded indent-2"
-            placeholder="MIT"
-            onChange={handleLicenseChange}
-            value={license}
-          ></input>
-        </div>
+        </aside>
       </div>
     </div>
   );

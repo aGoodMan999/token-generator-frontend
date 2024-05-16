@@ -1,4 +1,4 @@
-export default function Tooltip({ message }) {
+export default function Tooltip({ message }: { message: string }) {
   return (
     <div className="group relative flex">
       <div className="icon-container hover:filter-dark">
