@@ -74,16 +74,102 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
     props.setOption({ ...props.option, isflashmintable: e.target.checked });
   };
 
+  interface RadioProps {
+    isChecked?: boolean;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    label: string;
+    tooltipMessage: string;
+  }
+
+  interface CheckboxProps {
+    isChecked?: boolean;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    label: string;
+    tooltipMessage: string;
+    isHeader?: boolean;
+  }
+
+  const Radio: React.FC<RadioProps> = ({
+    isChecked,
+    handleChange,
+    label,
+    tooltipMessage,
+  }) => {
+    return (
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center mb-0">
+          <input
+            id={label}
+            type="radio"
+            value=""
+            checked={isChecked}
+            name="default-radio"
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            onChange={handleChange}
+          />
+          <label
+            htmlFor={label}
+            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            {label}
+          </label>
+        </div>
+        <Tooltip message={tooltipMessage} />
+      </div>
+    );
+  };
+
+  const CheckBox: React.FC<CheckboxProps> = ({
+    isChecked,
+    handleChange,
+    label,
+    tooltipMessage,
+    isHeader = false,
+  }) => {
+    return (
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center mb-0">
+          {isHeader && (
+            <label
+              htmlFor="label"
+              className="ms-0 text-base font-medium text-gray-900 dark:text-gray-300"
+            >
+              {label}
+            </label>
+          )}
+          <input
+            id="label"
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleChange}
+            className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded ${
+              isHeader && "ml-2"
+            } focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600`}
+          />
+          {!isHeader && (
+            <label
+              htmlFor="label"
+              className="ms-3 text-base font-medium text-gray-900 dark:text-gray-300"
+            >
+              {label}
+            </label>
+          )}
+        </div>
+        <Tooltip message={tooltipMessage} />
+      </div>
+    );
+  };
+
   return (
     <div className="token-option-container">
       {/* SETTING */}
       <div id="setting">
         <aside
           id="default-sidebar"
-          className=" top-0 left-0 z-40 w-80 h-screen transition-transform -translate-x-full sm:translate-x-0"
+          className="top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
           aria-label="Sidebar"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+          <div className="h-full px-3 py-4 w-100000 bg-gray-50 dark:bg-gray-800">
             {/* <ul className="space-y-2 font-medium"></ul> */}
             <h1>Setting</h1>
             <div className="ms-2">
@@ -133,7 +219,7 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
                   Premint
                 </label>
                 <input
-                  onChange={handlePermitChange}
+                  onChange={handlePremintChange}
                   value={premint}
                   type="text"
                   id="premint"
@@ -148,232 +234,193 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
             <div className="flex flex-col">
               <h1>Features</h1>
               <div className="ms-2">
-                <div className="flex items-center gap-x-4">
-                  <input
-                    id="mintable"
-                    type="checkbox"
-                    checked={ismintable}
-                    onChange={handleMintableChange}
-                  ></input>
-                  <label htmlFor="mintable">Mintable</label>
-                  <Tooltip message="Mintable" />
-                </div>{" "}
-                <div className="flex items-center gap-x-4">
-                  <input
-                    id="burnable"
-                    onChange={handleBurnableChange}
-                    checked={isburnable}
-                    type="checkbox"
-                  ></input>
-                  <label htmlFor="burnable">Burnable</label>
-                  <Tooltip message="Burnable " />
-                </div>{" "}
-                <div>
-                  <input
-                    id="pausable"
-                    onChange={handlePausableChange}
-                    type="checkbox"
-                    checked={ispausable}
-                  ></input>
-                  <label htmlFor="pausable">Pausable</label>
-                </div>{" "}
-                <div>
-                  <input
-                    id="permit"
-                    onChange={handlePermitChange}
-                    checked={ispermit}
-                    type="checkbox"
-                  ></input>
-                  <label htmlFor="permit">Permit</label>
-                </div>{" "}
-                <div>
-                  <input
-                    id="flashMinting"
-                    onChange={handleFlashMintingChange}
-                    checked={isflashMinting}
-                    type="checkbox"
-                  ></input>
-                  <label htmlFor="flashMinting">Flash Minting</label>
-                </div>
+                <div className="flex items-center justify-between mb-4"></div>
+                <CheckBox
+                  handleChange={handleMintableChange}
+                  isChecked={ismintable}
+                  label="Mintable"
+                  tooltipMessage="Privileged accounts will be able to create more supply."
+                />
+                <CheckBox
+                  handleChange={handleBurnableChange}
+                  isChecked={isburnable}
+                  label="Burnable"
+                  tooltipMessage="Token holders will be able to destroy their tokens."
+                />
+                <CheckBox
+                  handleChange={handlePausableChange}
+                  isChecked={ispausable}
+                  label="Pausable"
+                  tooltipMessage="Privileged accounts will be able to pause the functionality marked as whenNotPaused. Useful for emergency response."
+                />{" "}
+                <CheckBox
+                  handleChange={handlePermitChange}
+                  isChecked={ispermit}
+                  label="Permit"
+                  tooltipMessage="Without paying gas, token holders will be able to allow third parties to transfer from their account."
+                />{" "}
+                <CheckBox
+                  handleChange={handleFlashMintingChange}
+                  isChecked={isflashMinting}
+                  label="Flash Minting"
+                  tooltipMessage="Built-in flash loans. Lend tokens without requiring collateral as long as they're returned in the same transaction."
+                />
               </div>
             </div>
+            <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
             {/* VOTE */}
             <div className="flex flex-col">
-              <div>
-                <label htmlFor="isVoted">Vote</label>
-                <input
-                  id="isVoted"
-                  type="checkbox"
-                  onChange={() => {
-                    handleVoteChange(
-                      votes === Vote_Dev.NONE
-                        ? Vote_Dev.BLOCK_NUMBER
-                        : Vote_Dev.NONE
-                    );
-                  }}
-                  checked={votes !== Vote_Dev.NONE}
-                  className="rounded-full"
-                ></input>
-              </div>
+              <CheckBox
+                handleChange={() => {
+                  handleVoteChange(
+                    votes === Vote_Dev.NONE
+                      ? Vote_Dev.BLOCK_NUMBER
+                      : Vote_Dev.NONE
+                  );
+                }}
+                isChecked={votes !== Vote_Dev.NONE}
+                label="Vote"
+                tooltipMessage="Keeps track of historical balances for voting in on-chain governance, with a way to delegate one's voting power to a trusted account."
+                isHeader={true}
+              />
               <div className="ms-2">
-                <div>
-                  <input
-                    id="blockNumber"
-                    type="radio"
-                    checked={votes === Vote_Dev.BLOCK_NUMBER}
-                    onChange={() => {
-                      handleVoteChange(1);
-                    }}
-                    name="voteType"
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="blockNumber">Block Number</label>
-                </div>
-                <div>
-                  <input
-                    id="timeStamp"
-                    type="radio"
-                    checked={votes === Vote_Dev.TIMESTAMP}
-                    onChange={() => {
-                      handleVoteChange(2);
-                    }}
-                    name="voteType"
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="timeStamp">Timestamp</label>
-                </div>
+                <Radio
+                  isChecked={votes === Vote_Dev.BLOCK_NUMBER}
+                  label="Block Number"
+                  tooltipMessage="Uses voting durations expressed as block numbers."
+                  handleChange={() => {
+                    handleVoteChange(1);
+                  }}
+                />
+                <Radio
+                  isChecked={votes === Vote_Dev.TIMESTAMP}
+                  label="Timestamp"
+                  tooltipMessage="Uses voting durations expressed as timestamps."
+                  handleChange={() => {
+                    handleVoteChange(2);
+                  }}
+                />{" "}
               </div>
             </div>
             {/* ACCESS CONTROL */}
             <div className="flex flex-col">
               <div>
-                <label htmlFor="accesscontrol">Access control</label>
-                <input
-                  id="accesscontrol"
-                  type="checkbox"
-                  onChange={() =>
+                <CheckBox
+                  handleChange={() =>
                     handleAccessControlChange(
                       accesscontrol === AccessControl_Dev.NONE
                         ? AccessControl_Dev.OWNABLE
                         : AccessControl_Dev.NONE
                     )
                   }
-                  checked={
+                  isChecked={
                     props.option.accesscontrol !== AccessControl_Dev.NONE
                   }
-                  className="rounded-full"
-                ></input>
+                  label="Access control"
+                  tooltipMessage="Restrict who can access the functions of a contract or when they can do it."
+                  isHeader={true}
+                />
               </div>
               <div className="ms-2">
-                <div>
-                  <input
-                    id="blocknumber"
-                    type="radio"
-                    checked={
-                      props.option.accesscontrol === AccessControl_Dev.OWNABLE
-                    }
-                    name="accessControlType"
-                    onChange={() => {
-                      handleAccessControlChange(1);
-                    }}
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="blocknumber">Ownable</label>
-                </div>
-                <div>
-                  <input
-                    id="roles"
-                    type="radio"
-                    checked={
-                      props.option.accesscontrol === AccessControl_Dev.ROLES
-                    }
-                    name="accessControlType"
-                    onChange={() => {
-                      handleAccessControlChange(2);
-                    }}
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="roles">Roles</label>
-                </div>
-                <div>
-                  <input
-                    id="managed"
-                    type="radio"
-                    checked={
-                      props.option.accesscontrol === AccessControl_Dev.MANAGED
-                    }
-                    name="accessControlType"
-                    onChange={() => {
-                      handleAccessControlChange(3);
-                    }}
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="managed">Managed</label>
-                </div>
+                <Radio
+                  handleChange={() => {
+                    handleAccessControlChange(1);
+                  }}
+                  label="Ownable"
+                  tooltipMessage="Simple mechanism with a single account authorized for all privileged actions."
+                  isChecked={
+                    props.option.accesscontrol === AccessControl_Dev.OWNABLE
+                  }
+                />
+                <Radio
+                  handleChange={() => {
+                    handleAccessControlChange(2);
+                  }}
+                  label="Roles"
+                  tooltipMessage="Flexible mechanism with a separate role for each privileged action. A role can have many authorized accounts."
+                  isChecked={
+                    props.option.accesscontrol === AccessControl_Dev.ROLES
+                  }
+                />{" "}
+                <Radio
+                  handleChange={() => {
+                    handleAccessControlChange(3);
+                  }}
+                  label="Managed"
+                  tooltipMessage="Enables a central contract to define a policy that allows certain callers to access certain functions."
+                  isChecked={
+                    props.option.accesscontrol === AccessControl_Dev.MANAGED
+                  }
+                />
               </div>
             </div>
             {/* UPGRADEABILITY */}
             <div className="flex flex-col">
-              <div>
-                <label htmlFor="upgradeability">Upgradeability</label>
-                <input
-                  id="upgradeability"
-                  type="checkbox"
-                  className="rounded-full"
-                ></input>
-              </div>
+              <CheckBox
+                handleChange={() => {}}
+                label="Upgradeability"
+                tooltipMessage="Smart contracts are immutable by default unless deployed behind an upgradeable proxy."
+                // isChecked={false}
+                isHeader={true}
+              />
+
               <div className="ms-2">
-                <div>
-                  <input
-                    id="transparent"
-                    type="checkbox"
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="transparent">Transparent</label>
-                </div>
-                <div>
-                  <input
-                    id="uups"
-                    type="checkbox"
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="uups">UUPS</label>
-                </div>
-                <div>
-                  <input
-                    id="managed"
-                    type="checkbox"
-                    className="rounded-full"
-                  ></input>
-                  <label htmlFor="managed">Managed</label>
-                </div>
+                <Radio
+                  label="Transparent"
+                  handleChange={() => {}}
+                  tooltipMessage="Uses more complex proxy with higher overhead, requires less changes in your contract. Can also be used with beacons."
+                  isChecked={false}
+                />
+                <Radio
+                  label="UUPS"
+                  handleChange={() => {}}
+                  tooltipMessage="Uses simpler proxy with less overhead, requires including extra code in your contract. Allows flexibility for authorizing upgrades."
+                  isChecked={false}
+                />
+                <Radio
+                  label="Managed"
+                  handleChange={() => {}}
+                  tooltipMessage=""
+                  isChecked={false}
+                />
               </div>
             </div>
             {/* INFO */}
-            <div className="flex flex-col w-fit">
+            <div className="flex flex-col ">
               <div>
-                <label className="block" htmlFor="securityContact">
+                <label
+                  htmlFor="securityContact"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Security contact
                 </label>
                 <input
-                  id="securityContact"
-                  placeholder="security@example.com"
+                  // onChange={handleNameChange}
+                  // value={name}
                   type="text"
-                  className="rounded indent-2"
-                ></input>
+                  id="securityContact"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="security@example.com"
+                  required
+                />
               </div>
               <div>
-                <label className="block" htmlFor="license">
+                <label
+                  htmlFor="license"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   License
                 </label>
                 <input
-                  id="license"
-                  type="text"
-                  className="rounded indent-2"
-                  placeholder="MIT"
                   onChange={handleLicenseChange}
                   value={license}
-                ></input>
+                  type="text"
+                  id="license"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="MIT"
+                  required
+                />
               </div>
             </div>
           </div>
