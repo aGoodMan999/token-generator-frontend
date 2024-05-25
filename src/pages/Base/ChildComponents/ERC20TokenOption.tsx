@@ -101,15 +101,14 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
           <input
             id={label}
             type="radio"
-            value=""
             checked={isChecked}
-            name="default-radio"
+            name={label}
             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             onChange={handleChange}
           />
           <label
             htmlFor={label}
-            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            className="ms-2 text-gray-900 dark:text-gray-300"
           >
             {label}
           </label>
@@ -131,14 +130,14 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
         <div className="flex items-center mb-0">
           {isHeader && (
             <label
-              htmlFor="label"
+              htmlFor={label}
               className="ms-0 text-base font-medium text-gray-900 dark:text-gray-300"
             >
               {label}
             </label>
           )}
           <input
-            id="label"
+            id={label}
             type="checkbox"
             checked={isChecked}
             onChange={handleChange}
@@ -148,7 +147,7 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
           />
           {!isHeader && (
             <label
-              htmlFor="label"
+              htmlFor={label}
               className="ms-3 text-base font-medium text-gray-900 dark:text-gray-300"
             >
               {label}
@@ -303,6 +302,8 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
                 />{" "}
               </div>
             </div>
+            <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
             {/* ACCESS CONTROL */}
             <div className="flex flex-col">
               <div>
@@ -355,6 +356,8 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
                 />
               </div>
             </div>
+            <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
             {/* UPGRADEABILITY */}
             <div className="flex flex-col">
               <CheckBox
@@ -386,6 +389,8 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
                 />
               </div>
             </div>
+            <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
+
             {/* INFO */}
             <div className="flex flex-col ">
               <div>
