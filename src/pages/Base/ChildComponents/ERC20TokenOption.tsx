@@ -65,6 +65,11 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
     props.setOption({ ...props.option, isburnable: e.target.checked });
   };
   const handlePausableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (accesscontrol === AccessControl_Dev.NONE) {
+      props.setOption({ ...props.option, ispausable: e.target.checked, accesscontrol: AccessControl_Dev.OWNABLE });
+      return;
+    }
+
     props.setOption({ ...props.option, ispausable: e.target.checked });
   };
   const handlePermitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,9 +146,8 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
             type="checkbox"
             checked={isChecked}
             onChange={handleChange}
-            className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded ${
-              isHeader && "ml-2"
-            } focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600`}
+            className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded ${isHeader && "ml-2"
+              } focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600`}
           />
           {!isHeader && (
             <label
@@ -361,7 +365,7 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
             {/* UPGRADEABILITY */}
             <div className="flex flex-col">
               <CheckBox
-                handleChange={() => {}}
+                handleChange={() => { }}
                 label="Upgradeability"
                 tooltipMessage="Smart contracts are immutable by default unless deployed behind an upgradeable proxy."
                 // isChecked={false}
@@ -371,19 +375,19 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
               <div className="ms-2">
                 <Radio
                   label="Transparent"
-                  handleChange={() => {}}
+                  handleChange={() => { }}
                   tooltipMessage="Uses more complex proxy with higher overhead, requires less changes in your contract. Can also be used with beacons."
                   isChecked={false}
                 />
                 <Radio
                   label="UUPS"
-                  handleChange={() => {}}
+                  handleChange={() => { }}
                   tooltipMessage="Uses simpler proxy with less overhead, requires including extra code in your contract. Allows flexibility for authorizing upgrades."
                   isChecked={false}
                 />
                 <Radio
                   label="Managed"
-                  handleChange={() => {}}
+                  handleChange={() => { }}
                   tooltipMessage=""
                   isChecked={false}
                 />
