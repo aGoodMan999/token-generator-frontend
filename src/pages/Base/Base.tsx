@@ -155,31 +155,15 @@ const Base = () => {
       // Prepare the code to share with Remix
       const codeToShare = code;
 
-      // Create a Gist on GitHub with the code
-      const response = await fetch("https://api.github.com/gists", {
-        method: "POST",
-        body: JSON.stringify({
-          description: "Code for Remix",
-          public: true,
-          files: {
-            "code.sol": {
-              content: codeToShare,
-            },
-          },
-        }),
-      });
+      // Encode the code in base64
+      const base64Code = btoa(codeToShare);
 
-      if (response.ok) {
-        // Parse the response to get the Gist ID
-        const data = await response.json();
-        const gistId = data.id;
+      // Construct the Remix URL with the base64 encoded code
+      const remixURL = `https://remix.ethereum.org/#version=soljson-v0.8.12&optimize=false&runs=200&code=${base64Code}`;
 
-        // Open Remix with the Gist ID
-        const remixURL = `https://remix.ethereum.org/#version=soljson-v0.8.12&optimize=false&runs=200&gist=${gistId}`;
-        window.open(remixURL, "_blank");
-      } else {
-        console.error("Failed to create Gist:", response.statusText);
-      }
+      // Open Remix with the encoded URL
+      // console.log("Opening Remix URL:", remixURL);
+      window.open(remixURL, "_blank");
     } catch (error) {
       console.error("Error while trying to open in Remix:", error);
     }
@@ -215,7 +199,7 @@ const Base = () => {
           onClose={() => setShowModal(false)}
         />
       )}
-      <Toaster richColors />
+      <Toaster richColors duration={3000} />
       <div className="h-full bg-lime-500">
         <div className="flex flex-col h-full">
           <div className="block bg-red-100">

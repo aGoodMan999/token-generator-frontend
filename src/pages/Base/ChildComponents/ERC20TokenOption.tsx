@@ -108,7 +108,7 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
           />
           <label
             htmlFor={label}
-            className="ms-2 text-gray-900 dark:text-gray-300"
+            className="ms-2 text-sm ext-gray-900 dark:text-gray-300"
           >
             {label}
           </label>
@@ -131,7 +131,7 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
           {isHeader && (
             <label
               htmlFor={label}
-              className="ms-0 text-base font-medium text-gray-900 dark:text-gray-300"
+              className="ms-0 text-sm font-light text-gray-900 dark:text-gray-300"
             >
               {label}
             </label>
@@ -148,7 +148,7 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
           {!isHeader && (
             <label
               htmlFor={label}
-              className="ms-3 text-base font-medium text-gray-900 dark:text-gray-300"
+              className="ms-3 text-sm font-light  text-gray-900 dark:text-gray-300"
             >
               {label}
             </label>
