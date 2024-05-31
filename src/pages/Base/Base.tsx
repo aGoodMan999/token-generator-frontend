@@ -1,18 +1,19 @@
 import axios from "axios";
 import { PopupModal } from "./ChildComponents/PopupModal";
 import { useContext, useEffect, useState } from "react";
-import { AccountContext } from '../../context/AccountContext';
-import Vote_Dev from '../../enums/Vote_Dev';
-import AccessControl_Dev from '../../enums/AccessControl_Dev';
-import ERC20 from './ChildComponents/ERC20';
-import ERC721 from './ChildComponents/ERC721';
+import { AccountContext } from "../../context/AccountContext";
+import Vote_Dev from "../../enums/Vote_Dev";
+import AccessControl_Dev from "../../enums/AccessControl_Dev";
+import ERC20 from "./ChildComponents/ERC20";
+import ERC721 from "./ChildComponents/ERC721";
+import { Toaster, toast } from "sonner";
 
 export type TokenOptions = {
   name: string;
   symbol: string;
   premint?: number;
   license: string;
-  baseuri?: string
+  baseuri?: string;
   votes: Vote_Dev;
   accesscontrol: AccessControl_Dev;
   ismintable: boolean;
@@ -23,12 +24,12 @@ export type TokenOptions = {
   isenumerable?: boolean;
   isuristorage?: boolean;
   isautoincrementids?: boolean;
-}
+};
 const INIT_OPTION: TokenOptions = {
-  name: '',
-  symbol: '',
+  name: "",
+  symbol: "",
   premint: 0,
-  license: 'MIT',
+  license: "MIT",
   votes: Vote_Dev.NONE,
   accesscontrol: AccessControl_Dev.NONE,
   ismintable: false,
@@ -38,15 +39,18 @@ const INIT_OPTION: TokenOptions = {
   isflashmintable: false,
   isenumerable: false,
   isuristorage: false,
-  isautoincrementids: false
+  isautoincrementids: false,
+};
+enum TokenType {
+  ERC20 = "ERC20",
+  ERC721 = "ERC721",
 }
-enum TokenType { ERC20 = 'ERC20', ERC721 = 'ERC721' };
 
 const Base = () => {
   const { deployToken } = useContext(AccountContext);
   const [tokenType, setTokenType] = useState<TokenType>(TokenType.ERC20);
   const [option, setOption] = useState<TokenOptions>(INIT_OPTION);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeloySuccess, setIsDeloySucess] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -55,14 +59,13 @@ const Base = () => {
     getCode(option);
   }, [option]);
 
-
   const getCode = async (option: TokenOptions) => {
     try {
-      const url = `http://localhost:3002/code/${tokenType}`
+      const url = `http://localhost:3002/code/${tokenType}`;
       const res = await axios.get(url, {
         //Set the Access-Control-Allow-Origin header on the server to allow the client to make cross-origin requests
         headers: {
-          'Access-Control-Allow-Origin': '*'
+          "Access-Control-Allow-Origin": "*",
         },
         params: {
           tokentype: tokenType,
@@ -80,15 +83,15 @@ const Base = () => {
           isuristorage: option.isuristorage ? 1 : 0,
           isautoincrementids: option.isautoincrementids ? 1 : 0,
           votes: option.votes,
-          accesscontrol: option.accesscontrol
-        }
-      })
+          accesscontrol: option.accesscontrol,
+        },
+      });
       console.log(res.data);
       setCode(res.data.contract);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   // useEffect(() => {
   //     const option: TokenOption = {
@@ -117,10 +120,10 @@ const Base = () => {
 
     try {
       document.execCommand("copy");
-      alert("Code copied to clipboard!");
+      toast.info("Code copied to clipboard!");
     } catch (err) {
       console.error("Error copying to clipboard:", err);
-      alert("Failed to copy code to clipboard!");
+      toast.error("Failed to copy code to clipboard!");
     } finally {
       document.body.removeChild(textArea);
     }
@@ -130,11 +133,11 @@ const Base = () => {
     setIsLoading(true);
     try {
       if (option.name.length === 0) {
-        alert("Please fill the name field");
+        toast.error("Please fill the name field");
         return;
       }
       if (option.name.includes(" ")) {
-        alert("Name should not contain space");
+        toast.error("Name should not contain space");
         return;
       }
       await deployToken(option, tokenType);
@@ -212,16 +215,32 @@ const Base = () => {
           onClose={() => setShowModal(false)}
         />
       )}
+      <Toaster richColors />
       <div className="h-full bg-lime-500">
-
         <div className="flex flex-col h-full">
           <div className="block bg-red-100">
-            <div className='flex gap-2 w-full p-3 bg-green-500'>
-              <div className='flex gap-1'>
-                <button className={`${tokenType === TokenType.ERC20 ? "bg-blue-700" : "bg-white"} rounded border p-2 text-sm border-black`} disabled={tokenType === TokenType.ERC20} onClick={() => setTokenType(TokenType.ERC20)}>ERC20</button>
-                <button className={`${tokenType === TokenType.ERC721 ? "bg-blue-700" : "bg-white"} rounded border p-2 text-sm border-black`} disabled={tokenType === TokenType.ERC721} onClick={() => setTokenType(TokenType.ERC721)}>ERC721</button>
+            <div className="flex gap-2 w-full p-3 bg-green-500">
+              <div className="flex gap-1">
+                <button
+                  className={`${
+                    tokenType === TokenType.ERC20 ? "bg-blue-700" : "bg-white"
+                  } rounded border p-2 text-sm border-black`}
+                  disabled={tokenType === TokenType.ERC20}
+                  onClick={() => setTokenType(TokenType.ERC20)}
+                >
+                  ERC20
+                </button>
+                <button
+                  className={`${
+                    tokenType === TokenType.ERC721 ? "bg-blue-700" : "bg-white"
+                  } rounded border p-2 text-sm border-black`}
+                  disabled={tokenType === TokenType.ERC721}
+                  onClick={() => setTokenType(TokenType.ERC721)}
+                >
+                  ERC721
+                </button>
               </div>
-              <div className='flex-1'></div>
+              <div className="flex-1"></div>
               <div className="flex justify-end gap-2 w-full p-3 bg-green-500">
                 <button
                   className="bg-white rounded border p-2 text-sm border-black"
@@ -284,15 +303,20 @@ const Base = () => {
             </div>
           </div>
           <div className="flex-1 flex flex-column bg-stone-500">
-            {tokenType === TokenType.ERC20 ?
+            {tokenType === TokenType.ERC20 ? (
               <ERC20 option={option} setOption={setOption} code={code}></ERC20>
-              :
-              <ERC721 option={option} setOption={setOption} code={code}></ERC721>}
+            ) : (
+              <ERC721
+                option={option}
+                setOption={setOption}
+                code={code}
+              ></ERC721>
+            )}
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default Base;
