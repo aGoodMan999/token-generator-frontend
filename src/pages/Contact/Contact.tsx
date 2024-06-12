@@ -160,9 +160,9 @@ const Contact = () => {
           <div className=" mt-11  grid grid-flow-col auto-cols-max gap-36">
             <CardComponent
               imageUrl={telephoneImage}
-              title="Want to clear your dout on phone. Call now 8998-1245-002"
+              title="Want to clear your dout on phone. Call now 0389-553-233"
             />
-            <CardComponent imageUrl={letterImage} title="abc@gmail.com" />
+            <CardComponent imageUrl={letterImage} title="gangOfThree@gmail.com" />
             <CardComponent imageUrl={pinImage} title="UIT" />
           </div>
         </div>
