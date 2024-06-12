@@ -206,18 +206,16 @@ const Base = () => {
             <div className="flex gap-2 w-full p-3 bg-green-500">
               <div className="flex gap-1">
                 <button
-                  className={`${
-                    tokenType === TokenType.ERC20 ? "bg-blue-700" : "bg-white"
-                  } rounded border p-2 text-sm border-black`}
+                  className={`${tokenType === TokenType.ERC20 ? "bg-blue-700" : "bg-white"
+                    } rounded border p-2 text-sm border-black`}
                   disabled={tokenType === TokenType.ERC20}
                   onClick={() => setTokenType(TokenType.ERC20)}
                 >
                   ERC20
                 </button>
                 <button
-                  className={`${
-                    tokenType === TokenType.ERC721 ? "bg-blue-700" : "bg-white"
-                  } rounded border p-2 text-sm border-black`}
+                  className={`${tokenType === TokenType.ERC721 ? "bg-blue-700" : "bg-white"
+                    } rounded border p-2 text-sm border-black`}
                   disabled={tokenType === TokenType.ERC721}
                   onClick={() => setTokenType(TokenType.ERC721)}
                 >

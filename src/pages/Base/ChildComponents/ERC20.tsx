@@ -11,12 +11,12 @@ const ERC20: React.FC<ERC20Props> = (props) => {
   const { option, setOption, code } = props;
   return (
     <>
-      <div className="bg-red-500">
+      <div className="bg-white overflow-y-scroll">
         <ERC20TokenOption
           option={option}
           setOption={setOption}
         ></ERC20TokenOption>
-      </div>
+      </div >
       <div className="flex-1">
         <CodeViewer code={code}></CodeViewer>
       </div>
