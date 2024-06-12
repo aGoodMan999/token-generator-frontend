@@ -20,7 +20,7 @@ const CodeViewer: React.FC<CodeViewerProps> = (props) => {
     <div className="h-full">
       <h1>CodeViewer</h1>
       <div className="p-2">
-        <pre className="h-full">
+        <pre className="h-full border border-white">
           <code ref={codeRef} className="language-solidity">
             {props.code}
           </code>
