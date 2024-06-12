@@ -119,6 +119,7 @@ const ERC721TokenOption: React.FC<TokenOptionProps> = (props) => {
   };
 
   interface RadioProps {
+    isDisabled?: boolean;
     isChecked?: boolean;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     label: string;
@@ -126,12 +127,12 @@ const ERC721TokenOption: React.FC<TokenOptionProps> = (props) => {
   }
 
   interface CheckboxProps {
+    isDisabled?: boolean;
     isChecked?: boolean;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     label: string;
     tooltipMessage: string;
     isHeader?: boolean;
-    isIconBeforIconShow?: boolean;
   }
 
   const Radio: React.FC<RadioProps> = ({
@@ -139,21 +140,23 @@ const ERC721TokenOption: React.FC<TokenOptionProps> = (props) => {
     handleChange,
     label,
     tooltipMessage,
+    isDisabled = false,
   }) => {
     return (
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center mb-0">
           <input
+            disabled={isDisabled}
             id={label}
             type="radio"
             checked={isChecked}
             name={label}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 "
+            className={`${isDisabled && "cursor-not-allowed"} w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600`}
             onChange={handleChange}
           />
           <label
             htmlFor={label}
-            className="ms-2 text-gray-900 dark:text-gray-300"
+            className="ms-2 text-sm ext-gray-900 dark:text-gray-300"
           >
             {label}
           </label>
@@ -169,34 +172,32 @@ const ERC721TokenOption: React.FC<TokenOptionProps> = (props) => {
     label,
     tooltipMessage,
     isHeader = false,
-    isIconBeforIconShow = false,
+    isDisabled = false,
   }) => {
     return (
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center mb-0">
-          {isIconBeforIconShow && <span className="mr-2">{"└"}</span>}
-
           {isHeader && (
             <label
               htmlFor={label}
-              className="ms-0 text-gray-900 dark:text-gray-300"
+              className="ms-0 text-sm font-light text-gray-900 dark:text-gray-300"
             >
               {label}
             </label>
           )}
           <input
+            disabled={isDisabled}
             id={label}
             type="checkbox"
             checked={isChecked}
             onChange={handleChange}
-            className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded ${
-              isHeader && "ml-2"
-            } focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600`}
+            className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded ${isDisabled && "cursor-not-allowed"} ${isHeader && "ml-2"
+              } focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600`}
           />
           {!isHeader && (
             <label
               htmlFor={label}
-              className="ms-3 text-sm font-light text-gray-900 dark:text-gray-300"
+              className="ms-3 text-sm font-light  text-gray-900 dark:text-gray-300"
             >
               {label}
             </label>
@@ -416,10 +417,11 @@ const ERC721TokenOption: React.FC<TokenOptionProps> = (props) => {
               </div>
             </div>
             {/* UPGRADEABILITY */}
-            <div className="flex flex-col">
+            <div className="flex flex-col" onClick={() => { alert("This feature is currently not working") }}>
               <div>
                 <CheckBox
-                  handleChange={() => {}}
+                  isDisabled={true}
+                  handleChange={() => { }}
                   label="Upgradeability"
                   tooltipMessage="Smart contracts are immutable by default unless deployed behind an upgradeable proxy."
                   // isChecked={false}
@@ -428,21 +430,17 @@ const ERC721TokenOption: React.FC<TokenOptionProps> = (props) => {
               </div>
               <div className="ms-2">
                 <Radio
+                  isDisabled={true}
                   label="Transparent"
-                  handleChange={() => {}}
+                  handleChange={() => { }}
                   tooltipMessage="Uses more complex proxy with higher overhead, requires less changes in your contract. Can also be used with beacons."
                   isChecked={false}
                 />
                 <Radio
+                  isDisabled={true}
                   label="UUPS"
-                  handleChange={() => {}}
+                  handleChange={() => { }}
                   tooltipMessage="Uses simpler proxy with less overhead, requires including extra code in your contract. Allows flexibility for authorizing upgrades."
-                  isChecked={false}
-                />
-                <Radio
-                  label="Managed"
-                  handleChange={() => {}}
-                  tooltipMessage=""
                   isChecked={false}
                 />
               </div>
