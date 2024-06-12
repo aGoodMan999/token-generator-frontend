@@ -381,12 +381,14 @@ const ERC20TokenOption: React.FC<TokenOptionProps> = (props) => {
 
               <div className="ms-2">
                 <Radio
+                  isDisabled={true}
                   label="Transparent"
                   handleChange={() => { }}
                   tooltipMessage="Uses more complex proxy with higher overhead, requires less changes in your contract. Can also be used with beacons."
                   isChecked={false}
                 />
                 <Radio
+                  isDisabled={true}
                   label="UUPS"
                   handleChange={() => { }}
                   tooltipMessage="Uses simpler proxy with less overhead, requires including extra code in your contract. Allows flexibility for authorizing upgrades."
