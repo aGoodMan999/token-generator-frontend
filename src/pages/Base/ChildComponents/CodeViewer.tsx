@@ -14,6 +14,22 @@ const CodeViewer: React.FC<CodeViewerProps> = (props) => {
     if (codeRef.current) {
       Prism.highlightElement(codeRef.current);
     }
+    let stringElement = document.getElementsByClassName("string");
+    for (let i = 0; i < stringElement.length; i++) {
+      console.log(stringElement[i]);
+      if (stringElement[i].innerHTML?.startsWith("\"@openzeppelin")) {
+        const achor: HTMLAnchorElement = document.createElement("a");
+        const version = "v5.0.2"
+        const subLink = `https://github.com/OpenZeppelin/openzeppelin-contracts/blob/${version}`;
+        const cleanText = stringElement[i].textContent?.replace(/^"|"$/g, ''); // Remove leading and trailing quotes
+        const link = cleanText?.replace("@openzeppelin", subLink) ?? "";
+        achor.href = link;
+        achor.textContent = stringElement[i].textContent;
+        achor.target = "_blank"; // Open in new tab
+        stringElement[i].textContent = '';
+        stringElement[i].appendChild(achor);
+      }
+    }
   }, [props.code]);
 
   return (

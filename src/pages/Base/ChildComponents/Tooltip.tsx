@@ -18,7 +18,7 @@ export default function Tooltip({ message }: { message: string }) {
           />
         </svg>
       </div>
-      <span className="absolute left-8 mb-0 scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100  min-w-[300px] max-w-xs">
+      <span className="absolute z-0 left-8 mb-0 scale-0 transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100  min-w-[300px] max-w-xs">
         {message}
       </span>
     </div>

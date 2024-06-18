@@ -11,7 +11,7 @@ const ERC20: React.FC<ERC20Props> = (props) => {
   const { option, setOption, code } = props;
   return (
     <>
-      <div className="bg-white overflow-y-scroll">
+      <div className="bg-white">
         <ERC20TokenOption
           option={option}
           setOption={setOption}

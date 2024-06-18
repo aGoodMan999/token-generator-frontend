@@ -284,7 +284,7 @@ const Base = () => {
               </div>
             </div>
           </div>
-          <div className="flex-1 flex flex-column bg-stone-500">
+          <div className="flex-1 flex flex-column bg-stone-500  ">
             {tokenType === TokenType.ERC20 ? (
               <ERC20 option={option} setOption={setOption} code={code}></ERC20>
             ) : (
